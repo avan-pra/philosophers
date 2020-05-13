@@ -16,6 +16,21 @@ t_timeval diff_time(t_timeval t1, t_timeval t2)
 	return (ret);
 }
 
+int try_eat(t_philo *philo)
+{
+	int i;
+
+	if (pthread_mutex_trylock(philo->mutext1) != 0)
+		return (-1);
+	if (pthread_mutex_trylock(philo->mutext2) != 0)
+	{
+		pthread_mutex_unlock(philo->mutext1);
+		return (-1);
+	}
+	//printf("JE MAGE SAMER  %d\n", philo->number);
+	return (0);
+}
+
 void	*ft_philosopher(void *param)
 {
 	t_philo *philo;
@@ -49,7 +64,7 @@ void	*ft_philosopher(void *param)
 				philo->dead = 1;
 				return(NULL);
 			}
-			if (1) //si il reussi
+			if (try_eat(philo) == 0) //si il reussi
 			{
 				state = 1;
 				printf("Philosophe %d mange a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
@@ -63,6 +78,8 @@ void	*ft_philosopher(void *param)
 			{
 				last_time_eat = t_now;
 				printf("Philosophe %d a fini de manger a %ld:%.6ld et va dormir\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				pthread_mutex_unlock(philo->mutext1);
+				pthread_mutex_unlock(philo->mutext2);
 				state = 2;
 				j++;
 				t_s = t_now;
@@ -80,10 +97,9 @@ void	*ft_philosopher(void *param)
 			t_time = diff_time(t_s, t_now);
 			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_sleep)
 			{
-				//printf("Philosophe %d a fini de dormir a %ld:%.6ld et va philosopher\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				printf("Philosophe %d a fini de dormir a %ld:%.6ld et va philosopher\n", philo->number, t_now.tv_sec, t_now.tv_usec);
 				state = 0;
 			}
-
 		}
 	}
 	philo->dead = 2;
