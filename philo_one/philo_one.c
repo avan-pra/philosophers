@@ -1,22 +1,90 @@
 #include "phile_one.h"
 
+typedef struct timeval t_timeval;
+
+t_timeval diff_time(t_timeval t1, t_timeval t2)
+{
+    unsigned long time1;
+    unsigned long time2;
+    t_timeval ret;
+
+    time1 = t1.tv_sec * 1000000 + t1.tv_usec;
+    time2 = t2.tv_sec * 1000000 + t2.tv_usec;
+    time2 -= time1;
+    ret.tv_sec = time2 / 1000000;
+    ret.tv_usec = (int) time2 - ret.tv_sec * 1000000;
+	return (ret);
+}
+
 void	*ft_philosopher(void *param)
 {
 	t_philo *philo;
 	int j;
+	t_timeval t_start;
+	t_timeval last_time_eat;
+	t_timeval t_now;
+	t_timeval t_s;
+	t_timeval t_time;
+	int state; // 0 = philo / 1 = eat / 2 = sleep
 
+	gettimeofday(&t_start, NULL);
 	philo = (t_philo*)param;
-	//printf("JE SUIS LE NOUMERO %d\n", philo->number);
+	gettimeofday(&t_now, NULL);
+	t_now = diff_time(t_start, t_now);
+	last_time_eat = t_now;
+	state = 0;
+	printf("Lancement du philosophe %d a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
 	j = 0;
 	while (j < philo->number_of_time_each_philosophers_must_eat)
 	{
-		usleep(philo->time_to_eat);
-		if (rand() % 1000 == 1)
+		gettimeofday(&t_now, NULL);
+		t_now = diff_time(t_start, t_now);
+
+		if (state == 0) // il philo
 		{
-			philo->dead = 1;
-			return (philo);
+			t_time = diff_time(last_time_eat, t_now);
+			if (t_time.tv_sec * 1000000 + t_time.tv_usec > philo->time_to_die)
+			{
+				printf("Philosophe %d decede a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				philo->dead = 1;
+				return(NULL);
+			}
+			if (1) //si il reussi
+			{
+				state = 1;
+				printf("Philosophe %d mange a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				t_s = t_now;
+			}
 		}
-		++j;
+		else if (state == 1) //il mange
+		{
+			t_time = diff_time(t_s, t_now);
+			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_eat)
+			{
+				last_time_eat = t_now;
+				printf("Philosophe %d a fini de manger a %ld:%.6ld et va dormir\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				state = 2;
+				j++;
+				t_s = t_now;
+			}
+		}
+		else if (state == 2) //il dort
+		{
+			t_time = diff_time(last_time_eat, t_now);
+			if (t_time.tv_sec * 1000000 + t_time.tv_usec > philo->time_to_die)
+			{
+				printf("Philosophe %d decede a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				philo->dead = 1;
+				return(NULL);
+			}
+			t_time = diff_time(t_s, t_now);
+			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_sleep)
+			{
+				//printf("Philosophe %d a fini de dormir a %ld:%.6ld et va philosopher\n", philo->number, t_now.tv_sec, t_now.tv_usec);
+				state = 0;
+			}
+
+		}
 	}
 	philo->dead = 2;
 	return (NULL);
@@ -31,6 +99,17 @@ void copy_struct(t_philo *paste, t_philo copy)
 	paste->time_to_sleep = copy.time_to_sleep;
 }
 
+void init_mutex(pthread_mutex_t *mutex, int nbr)
+{
+	int i = 0;
+
+	while (i < nbr)
+	{
+		pthread_mutex_init(&mutex[i], NULL);
+		++i;
+	}
+}
+
 void create_start_philo(int nbr, t_philo philo)
 {
 	t_philo arr[nbr];
@@ -38,12 +117,18 @@ void create_start_philo(int nbr, t_philo philo)
 	int j;
 
 	j = 0;
-	printf("%d\n", nbr);
+	pthread_mutex_t mutext[philo.number_of_philosopher];
+	init_mutex(mutext, philo.number_of_philosopher);
 	while (j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[j], philo);
 		arr[j].dead = 0;
 		arr[j].number = j;
+
+		arr[j].mutext1 = &mutext[j];
+		arr[j].mutext2 = (j + 1 == philo.number_of_philosopher) ?
+			&mutext[0]: &mutext[j + 1];
+
 		pthread_create(&th[j], NULL, &ft_philosopher, &arr[j]);
 		++j;
 	}
@@ -70,7 +155,7 @@ void create_start_philo(int nbr, t_philo philo)
 			}
 			++j;
 		}
-		usleep(1000);
+		usleep(9000);
 	}
 }
 
