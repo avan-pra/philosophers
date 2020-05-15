@@ -24,7 +24,7 @@ int try_eat(t_philo *philo)
 		return (-1);
 	if (pthread_mutex_trylock(philo->mutext2) != 0)
 	{
-		pthread_mutex_unlock(philo->mutext1);
+		pthread_mutex_unlock(philo->mutext1); //virer car il lock la fourchette et tu son mate si ce dernier peut manger, faire un thread de monitoring pour chaque philo, faire mutex pour checker la mort d'un mec
 		return (-1);
 	}
 	//printf("JE MAGE SAMER  %d\n", philo->number);
@@ -101,6 +101,7 @@ void	*ft_philosopher(void *param)
 				state = 0;
 			}
 		}
+		usleep(5000);
 	}
 	philo->dead = 2;
 	return (NULL);
@@ -171,7 +172,7 @@ void create_start_philo(int nbr, t_philo philo)
 			}
 			++j;
 		}
-		usleep(9000);
+		usleep(1000);
 	}
 }
 
