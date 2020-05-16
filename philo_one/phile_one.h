@@ -18,7 +18,7 @@ typedef struct	s_philo
 	int					dead;
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
-
+	struct timeval			t_start;
 	
 }				t_philo;
 

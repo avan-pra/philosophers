@@ -20,13 +20,20 @@ int try_eat(t_philo *philo)
 {
 	int i;
 
-	if (pthread_mutex_trylock(philo->mutext1) != 0)
-		return (-1);
-	if (pthread_mutex_trylock(philo->mutext2) != 0)
+	printf("-1  %d\n", philo->number);
+	if (pthread_mutex_lock(philo->mutext1) != 0)
 	{
+		printf("0  %d\n", philo->number);
+		return (-1);
+	}
+	printf("1  %d\n", philo->number);
+	if (pthread_mutex_lock(philo->mutext2) != 0)
+	{
+		printf("2  %d\n", philo->number);
 		pthread_mutex_unlock(philo->mutext1); //virer car il lock la fourchette et tu son mate si ce dernier peut manger, faire un thread de monitoring pour chaque philo, faire mutex pour checker la mort d'un mec
 		return (-1);
 	}
+	printf("3  %d\n", philo->number);
 	//printf("JE MAGE SAMER  %d\n", philo->number);
 	return (0);
 }
@@ -42,8 +49,8 @@ void	*ft_philosopher(void *param)
 	t_timeval t_time;
 	int state; // 0 = philo / 1 = eat / 2 = sleep
 
-	gettimeofday(&t_start, NULL);
 	philo = (t_philo*)param;
+	t_start = philo->t_start;
 	gettimeofday(&t_now, NULL);
 	t_now = diff_time(t_start, t_now);
 	last_time_eat = t_now;
@@ -101,7 +108,7 @@ void	*ft_philosopher(void *param)
 				state = 0;
 			}
 		}
-		usleep(5000);
+		usleep(1000);
 	}
 	philo->dead = 2;
 	return (NULL);
@@ -114,6 +121,7 @@ void copy_struct(t_philo *paste, t_philo copy)
 	paste->time_to_die = copy.time_to_die;
 	paste->time_to_eat = copy.time_to_eat;
 	paste->time_to_sleep = copy.time_to_sleep;
+	paste->t_start = copy.t_start;
 }
 
 void init_mutex(pthread_mutex_t *mutex, int nbr)
@@ -122,7 +130,7 @@ void init_mutex(pthread_mutex_t *mutex, int nbr)
 
 	while (i < nbr)
 	{
-		pthread_mutex_init(&mutex[i], NULL);
+		mutex[i] = (pthread_mutex_t)PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP;
 		++i;
 	}
 }
@@ -131,11 +139,12 @@ void create_start_philo(int nbr, t_philo philo)
 {
 	t_philo arr[nbr];
 	pthread_t th[nbr];
+	pthread_mutex_t mutext[philo.number_of_philosopher];
 	int j;
 
 	j = 0;
-	pthread_mutex_t mutext[philo.number_of_philosopher];
 	init_mutex(mutext, philo.number_of_philosopher);
+	gettimeofday(&philo.t_start, NULL);
 	while (j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[j], philo);
