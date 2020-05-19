@@ -7,6 +7,8 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+typedef struct timeval t_timeval;
+
 typedef struct	s_philo
 {
 	int					number_of_philosopher;
@@ -16,6 +18,7 @@ typedef struct	s_philo
 	int					number_of_time_each_philosophers_must_eat;
 	int					number;
 	int					dead;
+	int					eat;
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
 	struct timeval			t_start;
@@ -24,5 +27,6 @@ typedef struct	s_philo
 
 int		ft_atoi(const char *str);
 int		fill_and_error(t_philo *philo, char **argv, int argc);
+void	*ft_philosopher(void *param);
 
 #endif

@@ -1,119 +1,5 @@
 #include "phile_one.h"
 
-typedef struct timeval t_timeval;
-
-t_timeval diff_time(t_timeval t1, t_timeval t2)
-{
-    unsigned long time1;
-    unsigned long time2;
-    t_timeval ret;
-
-    time1 = t1.tv_sec * 1000000 + t1.tv_usec;
-    time2 = t2.tv_sec * 1000000 + t2.tv_usec;
-    time2 -= time1;
-    ret.tv_sec = time2 / 1000000;
-    ret.tv_usec = (int) time2 - ret.tv_sec * 1000000;
-	return (ret);
-}
-
-int try_eat(t_philo *philo)
-{
-	int i;
-
-	printf("-1  %d\n", philo->number);
-	if (pthread_mutex_lock(philo->mutext1) != 0)
-	{
-		printf("0  %d\n", philo->number);
-		return (-1);
-	}
-	printf("1  %d\n", philo->number);
-	if (pthread_mutex_lock(philo->mutext2) != 0)
-	{
-		printf("2  %d\n", philo->number);
-		pthread_mutex_unlock(philo->mutext1); //virer car il lock la fourchette et tu son mate si ce dernier peut manger, faire un thread de monitoring pour chaque philo, faire mutex pour checker la mort d'un mec
-		return (-1);
-	}
-	printf("3  %d\n", philo->number);
-	//printf("JE MAGE SAMER  %d\n", philo->number);
-	return (0);
-}
-
-void	*ft_philosopher(void *param)
-{
-	t_philo *philo;
-	int j;
-	t_timeval t_start;
-	t_timeval last_time_eat;
-	t_timeval t_now;
-	t_timeval t_s;
-	t_timeval t_time;
-	int state; // 0 = philo / 1 = eat / 2 = sleep
-
-	philo = (t_philo*)param;
-	t_start = philo->t_start;
-	gettimeofday(&t_now, NULL);
-	t_now = diff_time(t_start, t_now);
-	last_time_eat = t_now;
-	state = 0;
-	printf("Lancement du philosophe %d a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-	j = 0;
-	while (j < philo->number_of_time_each_philosophers_must_eat)
-	{
-		gettimeofday(&t_now, NULL);
-		t_now = diff_time(t_start, t_now);
-
-		if (state == 0) // il philo
-		{
-			t_time = diff_time(last_time_eat, t_now);
-			if (t_time.tv_sec * 1000000 + t_time.tv_usec > philo->time_to_die)
-			{
-				printf("Philosophe %d decede a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-				philo->dead = 1;
-				return(NULL);
-			}
-			if (try_eat(philo) == 0) //si il reussi
-			{
-				state = 1;
-				printf("Philosophe %d mange a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-				t_s = t_now;
-			}
-		}
-		else if (state == 1) //il mange
-		{
-			t_time = diff_time(t_s, t_now);
-			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_eat)
-			{
-				last_time_eat = t_now;
-				printf("Philosophe %d a fini de manger a %ld:%.6ld et va dormir\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-				pthread_mutex_unlock(philo->mutext1);
-				pthread_mutex_unlock(philo->mutext2);
-				state = 2;
-				j++;
-				t_s = t_now;
-			}
-		}
-		else if (state == 2) //il dort
-		{
-			t_time = diff_time(last_time_eat, t_now);
-			if (t_time.tv_sec * 1000000 + t_time.tv_usec > philo->time_to_die)
-			{
-				printf("Philosophe %d decede a %ld:%.6ld\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-				philo->dead = 1;
-				return(NULL);
-			}
-			t_time = diff_time(t_s, t_now);
-			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_sleep)
-			{
-				printf("Philosophe %d a fini de dormir a %ld:%.6ld et va philosopher\n", philo->number, t_now.tv_sec, t_now.tv_usec);
-				state = 0;
-			}
-		}
-		usleep(1000);
-	}
-	philo->dead = 2;
-	return (NULL);
-}
-
 void copy_struct(t_philo *paste, t_philo copy)
 {
 	paste->number_of_philosopher = copy.number_of_philosopher;
@@ -130,7 +16,7 @@ void init_mutex(pthread_mutex_t *mutex, int nbr)
 
 	while (i < nbr)
 	{
-		mutex[i] = (pthread_mutex_t)PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP;
+		pthread_mutex_init(&mutex[i], NULL);
 		++i;
 	}
 }
@@ -156,6 +42,7 @@ void create_start_philo(int nbr, t_philo philo)
 			&mutext[0]: &mutext[j + 1];
 
 		pthread_create(&th[j], NULL, &ft_philosopher, &arr[j]);
+		usleep(1000);
 		++j;
 	}
 	j = 0;
