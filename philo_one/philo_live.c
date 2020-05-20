@@ -1,9 +1,11 @@
 #include "phile_one.h"
 
+typedef struct timeval t_timeval;
+
 int try_eat(t_philo *philo)
 {
 	int i;
-
+	i = 8;
 	if (pthread_mutex_trylock(philo->mutext1) != 0)
 	{
 		return (-1);
@@ -139,18 +141,32 @@ t_timeval diff_time(t_timeval t1, t_timeval t2)
 void *monitoring(void *param)
 {
 	t_philo *philo;
-	t_timeval last_time_eat = timenow;
+	t_timeval t_now;
+	t_timeval t_start;
+	t_timeval last_time_eat;
+	t_timeval t_time;
+	gettimeofday(&t_now, NULL);
+	t_now = diff_time(t_start, t_now);
+	last_time_eat = t_now;
 
 	philo = (t_philo*)param;
 	while (1)
 	{
+		gettimeofday(&t_now, NULL);
+		t_now = diff_time(t_start, t_now);
 		if (philo->eat == 1)
 		{
-			last_time_eat = timenow;
+			last_time_eat = t_now;
 		}
-		else if (philo->eat == 0 && last_time_eat > philo->time_to_die)
+		else if (philo->eat == 0)
 		{
-			philo->dead = 1; //bon en vrai faut changer la methode de mort avec des mutex mais ca je le ferai moi
+			t_time = diff_time(last_time_eat, t_now);
+
+			if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_die)
+			{
+				printf("philo %d creve\n", philo->number);
+				philo->dead = 1; //bon en vrai faut changer la methode de mort avec des mutex mais ca je le ferai moi
+			}
 		}
 		usleep(1000);
 	}
@@ -195,6 +211,8 @@ void	*ft_philosopher(void *param)
 
 	philo = (t_philo*)param;
 	ntime_eat = 0;
+	pthread_t moni;
+	pthread_create(&moni, NULL, &monitoring, philo);
 	while (ntime_eat < philo->number_of_time_each_philosophers_must_eat)
 	{
 		get_fork(philo);
