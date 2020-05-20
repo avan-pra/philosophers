@@ -166,6 +166,8 @@ void *monitoring(void *param)
 			{
 				printf("philo %d creve\n", philo->number);
 				philo->dead = 1; //bon en vrai faut changer la methode de mort avec des mutex mais ca je le ferai moi
+				pthread_mutex_unlock(philo->die);
+				return (NULL);
 			}
 		}
 		usleep(1000);
@@ -221,6 +223,6 @@ void	*ft_philosopher(void *param)
 		psleep(philo);
 		++ntime_eat;
 	}
-	philo->dead = 2;
+	philo->eat = 1;
 	return (NULL);
 }

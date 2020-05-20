@@ -21,6 +21,8 @@ typedef struct	s_philo
 	int					eat;
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
+	pthread_mutex_t	*die;
+	pthread_t **th;
 	struct timeval			t_start;
 	
 }				t_philo;
@@ -28,5 +30,7 @@ typedef struct	s_philo
 int		ft_atoi(const char *str);
 int		fill_and_error(t_philo *philo, char **argv, int argc);
 void	*ft_philosopher(void *param);
+void	*winner(void *param);
+void	*loser(void *param);
 
 #endif

@@ -10,7 +10,7 @@ void copy_struct(t_philo *paste, t_philo copy)
 	paste->t_start = copy.t_start;
 }
 
-void init_mutex(pthread_mutex_t *mutex, int nbr)
+void init_mutex(pthread_mutex_t *mutex, int nbr, pthread_mutex_t mort)
 {
 	int i = 0;
 
@@ -21,55 +21,83 @@ void init_mutex(pthread_mutex_t *mutex, int nbr)
 	}
 }
 
-void create_start_philo(int nbr, t_philo philo)
+int create_start_philo(int nbr, t_philo philo)
 {
 	t_philo arr[nbr];
 	pthread_t th[nbr];
 	pthread_mutex_t mutext[philo.number_of_philosopher];
+	pthread_mutex_t mort;
 	int j;
 
 	j = 0;
-	init_mutex(mutext, philo.number_of_philosopher);
+	init_mutex(mutext, philo.number_of_philosopher, mort);
+	pthread_mutex_init(&mort, NULL);
+	pthread_mutex_lock(&mort);
 	gettimeofday(&philo.t_start, NULL);
+	philo.dead = 0;
 	while (j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[j], philo);
 		arr[j].dead = 0;
 		arr[j].number = j;
 
+		arr[j].die = &mort;
 		arr[j].mutext1 = &mutext[j];
 		arr[j].mutext2 = (j + 1 == philo.number_of_philosopher) ?
 			&mutext[0]: &mutext[j + 1];
 
 		pthread_create(&th[j], NULL, &ft_philosopher, &arr[j]);
-		usleep(1000);
+		usleep(5000);
 		++j;
 	}
-	j = 0;
+
+	pthread_t win;
+	pthread_t lose;
+	philo.th = (pthread_t**)&th;
+	philo.die = &mort;
+	pthread_create(&win, NULL, &winner, &philo);
+	pthread_create(&win, NULL, &loser, &philo);
+
 	while (1)
 	{
-		j = 0;
-		while (j < philo.number_of_philosopher)
+		if (philo.dead == 1)
 		{
-			if (arr[j].dead == 1)
-			{
-				printf("philosophe nbr: %d est mort, arret\n", j);
-				exit(1);
-			}
-			++j;
+			printf("someone died\n");
+			return (1);
 		}
-		j = 0;
-		while (arr[j].dead == 2)
+		else if (philo.dead == 2)
 		{
-			if (j == philo.number_of_philosopher - 1)
-			{
-				printf("CONGRATULATION THEY WIN\n");
-				exit(0);
-			}
-			++j;
+			printf("congratulation, they win\n");
+			return (0);
 		}
 		usleep(1000);
 	}
+
+	// j = 0;
+	// while (1)
+	// {
+	// 	// j = 0;
+	// 	// while (j < philo.number_of_philosopher)
+	// 	// {
+	// 	// 	if (arr[j].dead == 1)
+	// 	// 	{
+	// 	// 		printf("philosophe nbr: %d est mort, arret\n", j);
+	// 	// 		exit(1);
+	// 	// 	}
+	// 	// 	++j;
+	// 	// }
+	// 	j = 0;
+	// 	while (arr[j].dead == 2)
+	// 	{
+	// 		if (j == philo.number_of_philosopher - 1)
+	// 		{
+	// 			printf("CONGRATULATION THEY WIN\n");
+	// 			exit(0);
+	// 		}
+	// 		++j;
+	// 	}
+	// 	usleep(1000);
+	// }
 }
 
 int main(int argc, char **argv)
@@ -80,6 +108,5 @@ int main(int argc, char **argv)
 	srand(time(0));
 	if (fill_and_error(&philo, argv, argc) == 1)
 		return (1);
-	create_start_philo(philo.number_of_philosopher, philo);
-	return (0);
+	return (create_start_philo(philo.number_of_philosopher, philo));
 }
