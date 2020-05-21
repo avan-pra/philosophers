@@ -55,7 +55,7 @@ int create_start_philo(int nbr, t_philo philo)
 	pthread_t lose;
 	philo.th = (pthread_t*)&th;
 	philo.die = &mort;
-	pthread_create(&win, NULL, &winner, &philo);
+		pthread_create(&win, NULL, &winner, &philo);
 	pthread_create(&lose, NULL, &loser, &philo);
 
 	while (1)

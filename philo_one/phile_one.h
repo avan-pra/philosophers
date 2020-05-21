@@ -27,6 +27,8 @@ typedef struct	s_philo
 	
 }				t_philo;
 
+char   	*ft_itoa(unsigned long long nb);
+int		ft_strlen(char *str);
 int		ft_atoi(const char *str);
 int		fill_and_error(t_philo *philo, char **argv, int argc);
 void	*ft_philosopher(void *param);

@@ -16,14 +16,63 @@ t_timeval diff_time(t_timeval t1, t_timeval t2)
 	return (ret);
 }
 
+char	*join(char *s1, char *s2)
+{
+	int		i;
+	int		n;
+	char	*r;
+
+	if (ft_strlen(s1) + ft_strlen(s2) == 0)
+		return (NULL);
+	if (!(r = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1))))
+		return (NULL);
+	i = 0;
+	n = 0;
+	while (s1 != NULL && s1[i])
+	{
+		r[i] = s1[i];
+		i++;
+	}
+	while (s2 != NULL && s2[n])
+	{
+		r[i + n] = s2[n];
+		n++;
+	}
+	r[i + n] = 0;
+	return (r);
+}
+
 void display(t_timeval t_start, int philo, char *msg)
 {
 	t_timeval t_time;
+	char *str;
+	char *tmp;
+	char *toi;
+	int i;
+
 	gettimeofday(&t_time, NULL);
 	t_time = diff_time(t_start, t_time);
 
 	int time_ms = t_time.tv_sec * 1000 + t_time.tv_usec / 1000;
-	printf("%.6d %d %s\n", time_ms, philo, msg);
+	toi = ft_itoa(time_ms);
+	str = join(toi , " ");
+	free(toi);
+	tmp = str;
+	toi = ft_itoa(philo);
+	str = join(str, toi);
+	free(toi);
+	free(tmp);
+	tmp = str;
+	str = join(str, " ");
+	free(tmp);
+	tmp = str;
+	str = join(str, msg);
+	free(tmp);
+	tmp = str;
+	str = join(str, "\n");
+	free(tmp);
+	write(1, str, ft_strlen(str));
+	free(str);
 }
 
 void *monitoring(void *param)
@@ -100,11 +149,11 @@ void    *ft_philosopher(void *param)
     t_philo *philo;
     pthread_t moni;
     int ntime_eat;
-	
+
 	philo = (t_philo*)param;
     ntime_eat = 0;
     pthread_create(&moni, NULL, &monitoring, philo);
-    while (ntime_eat < philo->number_of_time_each_philosophers_must_eat)
+    while (ntime_eat < philo->number_of_time_each_philosophers_must_eat  || philo->number_of_time_each_philosophers_must_eat == -1)
     {
         if (philo->dead == 1)
             return (NULL);
