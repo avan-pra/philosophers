@@ -53,51 +53,25 @@ int create_start_philo(int nbr, t_philo philo)
 
 	pthread_t win;
 	pthread_t lose;
-	philo.th = (pthread_t**)&th;
+	philo.th = (pthread_t*)&th;
 	philo.die = &mort;
 	pthread_create(&win, NULL, &winner, &philo);
-	pthread_create(&win, NULL, &loser, &philo);
+	pthread_create(&lose, NULL, &loser, &philo);
 
 	while (1)
 	{
 		if (philo.dead == 1)
 		{
-			printf("someone died\n");
+			printf("End of simulation : one of the philosophers died\n");
 			return (1);
 		}
 		else if (philo.dead == 2)
 		{
-			printf("congratulation, they win\n");
+			printf("End of simulation : philosophers ate enough times\n");
 			return (0);
 		}
 		usleep(1000);
 	}
-
-	// j = 0;
-	// while (1)
-	// {
-	// 	// j = 0;
-	// 	// while (j < philo.number_of_philosopher)
-	// 	// {
-	// 	// 	if (arr[j].dead == 1)
-	// 	// 	{
-	// 	// 		printf("philosophe nbr: %d est mort, arret\n", j);
-	// 	// 		exit(1);
-	// 	// 	}
-	// 	// 	++j;
-	// 	// }
-	// 	j = 0;
-	// 	while (arr[j].dead == 2)
-	// 	{
-	// 		if (j == philo.number_of_philosopher - 1)
-	// 		{
-	// 			printf("CONGRATULATION THEY WIN\n");
-	// 			exit(0);
-	// 		}
-	// 		++j;
-	// 	}
-	// 	usleep(1000);
-	// }
 }
 
 int main(int argc, char **argv)

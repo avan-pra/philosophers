@@ -22,7 +22,7 @@ typedef struct	s_philo
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
 	pthread_mutex_t	*die;
-	pthread_t **th;
+	pthread_t *th;
 	struct timeval			t_start;
 	
 }				t_philo;

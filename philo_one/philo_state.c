@@ -8,7 +8,7 @@ void *winner(void *param)
 	philo = (t_philo*)param;
 	while (j < philo->number_of_philosopher)
 	{
-		pthread_join(*philo->th[j], NULL);
+		pthread_join(philo->th[j], NULL);
 		++j;
 	}
 	philo->dead = 2;
