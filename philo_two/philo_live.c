@@ -114,16 +114,16 @@ void *monitoring(void *param)
 
 void get_fork(t_philo *philo, t_timeval t_start)
 {
-	sem_wait(philo->mutext1);
+	sem_wait(philo->mutext);
 	display(t_start, philo->number, "has taken a fork");
-	sem_wait(philo->mutext2);
+	sem_wait(philo->mutext);
 	display(t_start, philo->number, "has taken a fork");
 }
 
 void release_fork(t_philo *philo)
 {
-	sem_post(philo->mutext1);
-	sem_post(philo->mutext2);
+	sem_post(philo->mutext);
+	sem_post(philo->mutext);
 }
 
 void eat(t_philo *philo, t_timeval t_start)

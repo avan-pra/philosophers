@@ -20,6 +20,9 @@ typedef struct	s_philo
 	int					number;
 	int					dead;
 	int					eat;
+	sem_t					*mutext;
+	sem_t					*die;
+	pthread_t				*th;
 	struct timeval			t_start;
 	
 }				t_philo;

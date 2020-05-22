@@ -21,7 +21,7 @@ int create_start_philo(int nbr, t_philo philo)
 	j = 0;
 	sem_init(&mutext, 0, philo.number_of_philosopher);
 	sem_init(&dead, 0, 1);
-	sem_wait(&mort);
+	sem_wait(&dead);
 	gettimeofday(&philo.t_start, NULL);
 	philo.dead = 0;
 	while (j < philo.number_of_philosopher)
@@ -30,9 +30,8 @@ int create_start_philo(int nbr, t_philo philo)
 		arr[j].dead = 0;
 		arr[j].number = j;
 
-		arr[j].die = &mort;
+		arr[j].die = &dead;
 		arr[j].mutext = &mutext;
-		arr[j].mutext2 = &mutext;
 
 		pthread_create(&th[j], NULL, &ft_philosopher, &arr[j]);
 		usleep(5000);
@@ -42,7 +41,7 @@ int create_start_philo(int nbr, t_philo philo)
 	pthread_t win;
 	pthread_t lose;
 	philo.th = (pthread_t*)&th;
-	philo.die = &mort;
+	philo.die = &dead;
 		pthread_create(&win, NULL, &winner, &philo);
 	pthread_create(&lose, NULL, &loser, &philo);
 
