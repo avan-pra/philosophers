@@ -62,11 +62,13 @@ int create_start_philo(int nbr, t_philo philo)
 	{
 		if (philo.dead == 1)
 		{
+			usleep(1000);
 			printf("End of simulation : one of the philosophers died\n");
 			return (1);
 		}
 		else if (philo.dead == 2)
 		{
+			usleep(1000);
 			printf("End of simulation : philosophers ate enough times\n");
 			return (0);
 		}
