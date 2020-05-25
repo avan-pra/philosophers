@@ -10,7 +10,7 @@ void copy_struct(t_philo *paste, t_philo copy)
 	paste->t_start = copy.t_start;
 }
 
-int create_start_philo(int nbr, t_philo philo)
+int create_start_philo(int nbr, t_philo philo) //three tree <- faux
 {
 	t_philo arr[nbr];
 	pthread_t th[nbr];
