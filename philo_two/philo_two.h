@@ -7,6 +7,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <semaphore.h>
+#include <fcntl.h>
 
 typedef struct timeval t_timeval;
 
