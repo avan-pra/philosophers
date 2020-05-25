@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_three.h"
 
 void copy_struct(t_philo *paste, t_philo copy)
 {
@@ -37,8 +37,7 @@ int create_start_philo(int nbr, t_philo philo)
 		pid = fork();
 		if (pid == 0)
 		{
-			pthread_create(&th[j], NULL, &ft_philosopher, &arr[j]);
-			pthread_join(th[j], NULL);
+			ft_philosopher(&arr[j]);
 			exit(0);
 		}
 		usleep(5000);
@@ -49,7 +48,7 @@ int create_start_philo(int nbr, t_philo philo)
 	pthread_t lose;
 	philo.th = (pthread_t*)&th;
 	philo.die = &dead;
-		pthread_create(&win, NULL, &winner, &philo);
+		// pthread_create(&win, NULL, &winner, &philo);
 	pthread_create(&lose, NULL, &loser, &philo);
 
 	while (1)
@@ -59,11 +58,11 @@ int create_start_philo(int nbr, t_philo philo)
 			printf("End of simulation : one of the philosophers died\n");
 			return (1);
 		}
-		else if (philo.dead == 2)
-		{
-			printf("End of simulation : philosophers ate enough times\n");
-			return (0);
-		}
+		// else if (philo.dead == 2)
+		// {
+		// 	printf("End of simulation : philosophers ate enough times\n");
+		// 	return (0);
+		// }
 		usleep(1000);
 	}
 }

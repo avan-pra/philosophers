@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_three.h"
 
 typedef struct timeval t_timeval;
 
@@ -152,8 +152,9 @@ void    *ft_philosopher(void *param)
 
 	philo = (t_philo*)param;
     ntime_eat = 0;
-    pthread_create(&moni, NULL, &monitoring, philo);
-    while (ntime_eat < philo->number_of_time_each_philosophers_must_eat  || philo->number_of_time_each_philosophers_must_eat == -1)
+	philo->eat = 0;
+	pthread_create(&moni, NULL, &monitoring, philo);
+	while (ntime_eat < philo->number_of_time_each_philosophers_must_eat  || philo->number_of_time_each_philosophers_must_eat == -1)
     {
         if (philo->dead == 1)
             return (NULL);

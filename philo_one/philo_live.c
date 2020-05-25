@@ -152,6 +152,7 @@ void    *ft_philosopher(void *param)
 
 	philo = (t_philo*)param;
     ntime_eat = 0;
+	philo->eat = 0;
     pthread_create(&moni, NULL, &monitoring, philo);
     while (ntime_eat < philo->number_of_time_each_philosophers_must_eat  || philo->number_of_time_each_philosophers_must_eat == -1)
     {

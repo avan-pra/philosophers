@@ -1,5 +1,5 @@
-#ifndef PHILO_ONE_H
-# define PHILO_ONE_H
+#ifndef PHILO_TWO_H
+# define PHILO_TWO_H
 
 #include <unistd.h>
 #include <sys/time.h>
