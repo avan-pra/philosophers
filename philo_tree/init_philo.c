@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_tree.h"
 
 int		ft_atoi(const char *str)
 {
@@ -40,19 +40,19 @@ int        fill_and_error(t_philo *philo, char **argv, int argc)
     philo->time_to_die = ft_atoi(argv[2]) * 1000;
     philo->time_to_eat = ft_atoi(argv[3]) * 1000;
     philo->time_to_sleep = ft_atoi(argv[4]) * 1000;
-    if (philo->time_to_die < 50000 || philo->time_to_die > 1000000)
+    if (philo->time_to_die < 50000 || philo->time_to_die >= 10000000)
     { 
-        write(2, "Error : value out of range for time to die\n", 25);
+        write(2, "Error : value out of range for time to die\n", 42);
         return (1);
     }
-    if (philo->time_to_sleep < 0 || philo->time_to_sleep > 1000000)
+    if (philo->time_to_sleep < 0 || philo->time_to_sleep >= 10000000)
     { 
-        write(2, "Error : value out of range for time to sleep\n", 25);
+        write(2, "Error : value out of range for time to sleep\n", 42);
         return (1);
     }
-    if (philo->time_to_eat < 0 || philo->time_to_eat > 1000000)
+    if (philo->time_to_eat < 0 || philo->time_to_eat >= 10000000)
     { 
-        write(2, "Error : value out of range for time to eat\n", 25);
+        write(2, "Error : value out of range for time to eat\n", 42);
         return (1);
     }
     if (philo->number_of_philosopher < 0 || philo->number_of_philosopher > 10000)

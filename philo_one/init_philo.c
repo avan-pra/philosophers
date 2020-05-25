@@ -40,17 +40,17 @@ int		fill_and_error(t_philo *philo, char **argv, int argc)
     philo->time_to_die = ft_atoi(argv[2]) * 1000;
     philo->time_to_eat = ft_atoi(argv[3]) * 1000;
     philo->time_to_sleep = ft_atoi(argv[4]) * 1000;
-    if (philo->time_to_die < 50000  philo->time_to_die > 1000000)
+    if (philo->time_to_die < 50000  philo->time_to_die >= 10000000)
     { 
         write(2, "Error : value out of range for time to die\n", 25);
         return (1);
     }
-    if (philo->time_to_sleep < 0  philo->time_to_sleep > 1000000)
+    if (philo->time_to_sleep < 0  philo->time_to_sleep >= 10000000)
     { 
         write(2, "Error : value out of range for time to sleep\n", 25);
         return (1);
     }
-    if (philo->time_to_eat < 0  philo->time_to_eat > 1000000)
+    if (philo->time_to_eat < 0  philo->time_to_eat >= 10000000)
     { 
         write(2, "Error : value out of range for time to eat\n", 25);
         return (1);

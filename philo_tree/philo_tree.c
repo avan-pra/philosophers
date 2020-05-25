@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_tree.h"
 
 void copy_struct(t_philo *paste, t_philo copy)
 {

@@ -1,4 +1,4 @@
-#include "philo_two.h"
+#include "philo_tree.h"
 
 typedef struct timeval t_timeval;
 
