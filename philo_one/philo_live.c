@@ -6,11 +6,11 @@
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/01/16 13:22:37 by avan-pra         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:34:19 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "phile_one.h"
+#include "philo_one.h"
 
 t_philo		*setup_philo(void *param, int *ntime_eat)
 {

@@ -6,11 +6,11 @@
 /*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/25 19:47:21 by velovo            #+#    #+#             */
-/*   Updated: 2020/05/26 15:35:48 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/26 14:46:37 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int		check_for_error(t_philo *philo)
 {

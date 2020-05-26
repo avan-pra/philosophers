@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phile_one.h                                        :+:      :+:    :+:   */
+/*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/01/16 13:22:37 by avan-pra         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:35:17 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILE_ONE_H
-# define PHILE_ONE_H
+#ifndef PHILO_ONE_H
+# define PHILO_ONE_H
 
 # include <unistd.h>
 # include <sys/time.h>

@@ -6,11 +6,11 @@
 /*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/25 20:07:19 by velovo            #+#    #+#             */
-/*   Updated: 2020/05/26 15:34:29 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:01:44 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "philo_two.h"
 
 int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	t_philo *philo, t_timeval t_start)
@@ -22,7 +22,7 @@ int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	{
 		display(t_start, philo->number, "died");
 		philo->dead = 1;
-		pthread_mutex_unlock(philo->die);
+		sem_post(philo->die);
 		return (1);
 	}
 	return (0);

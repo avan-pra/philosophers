@@ -6,11 +6,11 @@
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/01/16 13:22:37 by avan-pra         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:34:39 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "phile_one.h"
+#include "philo_one.h"
 
 void	copy_struct(t_philo *paste, t_philo copy, int nbr)
 {
