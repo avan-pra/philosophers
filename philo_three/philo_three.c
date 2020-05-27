@@ -1,76 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo_three.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/05/27 16:34:15 by raimbaul         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_three.h"
 
-void copy_struct(t_philo *paste, t_philo copy)
+void	copy_struct(t_philo *paste, t_philo copy)
 {
 	paste->number_of_philosopher = copy.number_of_philosopher;
-	paste->number_of_time_each_philosophers_must_eat = copy.number_of_time_each_philosophers_must_eat;
+	paste->number_of_time_each_philosophers_must_eat =
+		copy.number_of_time_each_philosophers_must_eat;
 	paste->time_to_die = copy.time_to_die;
 	paste->time_to_eat = copy.time_to_eat;
 	paste->time_to_sleep = copy.time_to_sleep;
 	paste->t_start = copy.t_start;
+	paste->philo_win = copy.philo_win;
 }
 
-int create_start_philo(int nbr, t_philo philo) //three tree <- faux
+int		check_status(t_philo philo, t_creat info)
 {
-	t_philo arr[nbr];
-	pthread_t th[nbr];
-	sem_t mutext;
-	sem_t dead;
-	int j;
-	int pid;
-
-	j = 0;
-	sem_init(&mutext, 1, philo.number_of_philosopher);
-	sem_init(&dead, 1, 1);
-	sem_wait(&dead);
-	gettimeofday(&philo.t_start, NULL);
+	pthread_create(&info.win, NULL, &winner, &philo);
+	pthread_create(&info.lose, NULL, &loser, &philo);
 	philo.dead = 0;
-	while (j < philo.number_of_philosopher)
-	{
-		copy_struct(&arr[j], philo);
-		arr[j].dead = 0;
-		arr[j].number = j;
-
-		arr[j].die = &dead;
-		arr[j].mutext = &mutext;
-
-		pid = fork();
-		if (pid == 0)
-		{
-			ft_philosopher(&arr[j]);
-			exit(0);
-		}
-		usleep(5000);
-		++j;
-	}
-
-	pthread_t win;
-	pthread_t lose;
-	philo.th = (pthread_t*)&th;
-	philo.die = &dead;
-		// pthread_create(&win, NULL, &winner, &philo);
-	pthread_create(&lose, NULL, &loser, &philo);
-
 	while (1)
 	{
 		if (philo.dead == 1)
 		{
+			usleep(1000);
 			printf("End of simulation : one of the philosophers died\n");
 			return (1);
 		}
-		// else if (philo.dead == 2)
-		// {
-		// 	printf("End of simulation : philosophers ate enough times\n");
-		// 	return (0);
-		// }
+		else if (philo.dead == 2)
+		{
+			usleep(1000);
+			printf("End of simulation : philosophers ate enough times\n");
+			return (0);
+		}
 		usleep(1000);
 	}
 }
 
-int main(int argc, char **argv)
+int		create_start_philo(int nbr, t_philo philo)
+{
+	t_philo		arr[nbr];
+	pthread_t	th[nbr];
+	sem_t		*mutext;
+	t_creat		info;
+	int pid;
+
+	sem_unlink("/philo_win");
+	philo.philo_win = sem_open("/philo_win", O_CREAT,0666, philo.number_of_philosopher);
+	sem_unlink("/mutext");
+	mutext = sem_open("/mutext", O_CREAT, 0666, philo.number_of_philosopher);
+	sem_unlink("/dead");
+	philo.die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_wait(philo.die);
+	gettimeofday(&philo.t_start, NULL);
+	info.j = 0;
+	while (info.j < philo.number_of_philosopher)
+	{
+		copy_struct(&arr[info.j], philo);
+		arr[info.j].dead = 0;
+		arr[info.j].number = info.j;
+		arr[info.j].die = philo.die;
+		arr[info.j].mutext = mutext;
+		sem_wait(philo.philo_win);
+		pid = fork();
+		if (pid == 0)
+		{
+			ft_philosopher(&arr[info.j]);
+			exit(0);
+		}
+		usleep(5000);
+		++info.j;
+	}
+	philo.th = (pthread_t*)&th;
+	return (check_status(philo, info));
+	return (0);
+}
+
+int		main(int argc, char **argv)
 {
 	t_philo philo;
-	int j;
 
 	srand(time(0));
 	if (fill_and_error(&philo, argv, argc) == 1)
