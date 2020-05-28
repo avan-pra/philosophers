@@ -6,7 +6,7 @@
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/05/27 16:31:54 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/28 13:05:10 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	*winner(void *param)
 	j = 0;
 	while (j < philo->number_of_philosopher)
 	{
-		printf("J = %p  %d\n", philo->philo_win, j);
 		sem_wait(philo->philo_win);
-		printf("yeah\n");
 		++j;
 	}
 	philo->dead = 2;

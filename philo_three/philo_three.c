@@ -6,11 +6,13 @@
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/05/27 16:34:15 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/28 13:37:13 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_three.h"
+#include <sys/types.h>
+#include <signal.h>
 
 void	copy_struct(t_philo *paste, t_philo copy)
 {
@@ -24,17 +26,25 @@ void	copy_struct(t_philo *paste, t_philo copy)
 	paste->philo_win = copy.philo_win;
 }
 
-int		check_status(t_philo philo, t_creat info)
+int		check_status(t_philo philo, t_creat info, pid_t* pid)
 {
+	int i;
+
 	pthread_create(&info.win, NULL, &winner, &philo);
 	pthread_create(&info.lose, NULL, &loser, &philo);
 	philo.dead = 0;
+	i = 0;
 	while (1)
 	{
 		if (philo.dead == 1)
 		{
 			usleep(1000);
 			printf("End of simulation : one of the philosophers died\n");
+			while (i < philo.number_of_philosopher)
+			{
+				kill(pid[i], SIGTERM);
+				i++;
+			}
 			return (1);
 		}
 		else if (philo.dead == 2)
@@ -53,7 +63,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	pthread_t	th[nbr];
 	sem_t		*mutext;
 	t_creat		info;
-	int pid;
+	pid_t pid[philo.number_of_philosopher];
 
 	sem_unlink("/philo_win");
 	philo.philo_win = sem_open("/philo_win", O_CREAT,0666, philo.number_of_philosopher);
@@ -72,8 +82,8 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].die = philo.die;
 		arr[info.j].mutext = mutext;
 		sem_wait(philo.philo_win);
-		pid = fork();
-		if (pid == 0)
+		pid[info.j] = fork();
+		if (pid[info.j] == 0)
 		{
 			ft_philosopher(&arr[info.j]);
 			exit(0);
@@ -82,7 +92,7 @@ int		create_start_philo(int nbr, t_philo philo)
 		++info.j;
 	}
 	philo.th = (pthread_t*)&th;
-	return (check_status(philo, info));
+	return (check_status(philo, info, pid));
 	return (0);
 }
 
