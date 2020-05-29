@@ -6,7 +6,7 @@
 /*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/25 19:56:53 by velovo            #+#    #+#             */
-/*   Updated: 2020/05/27 14:22:04 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/28 14:27:50 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,19 @@ char		*join(char *s1, char *s2)
 	return (r);
 }
 
-void		end_display(t_dish disp)
+void		end_display(t_dish disp, int philo, char *msg)
 {
+	disp.tmp = disp.str;
+	disp.toi = ft_itoa(philo);
+	disp.str = join(disp.str, disp.toi);
+	free(disp.toi);
+	free(disp.tmp);
+	disp.tmp = disp.str;
+	disp.str = join(disp.str, " ");
+	free(disp.tmp);
+	disp.tmp = disp.str;
+	disp.str = join(disp.str, msg);
+	free(disp.tmp);
 	disp.tmp = disp.str;
 	disp.str = join(disp.str, "\n");
 	free(disp.tmp);
@@ -68,22 +79,24 @@ void		display(t_timeval t_start, int philo, char *msg)
 	int			i;
 	int			time_ms;
 
+	i = 0;
 	gettimeofday(&t_time, NULL);
 	t_time = diff_time(t_start, t_time);
 	time_ms = t_time.tv_sec * 1000 + t_time.tv_usec / 1000;
 	disp.toi = ft_itoa(time_ms);
-	disp.str = join(disp.toi, " ");
-	free(disp.toi);
+	disp.str = NULL;
+	while (i + ft_strlen(disp.toi) < 5)
+	{
+		disp.tmp = disp.str;
+		disp.str = join(disp.str, "0");
+		if (disp.str)
+			free(disp.tmp);
+		i++;
+	}
 	disp.tmp = disp.str;
-	disp.toi = ft_itoa(philo);
 	disp.str = join(disp.str, disp.toi);
-	free(disp.toi);
 	free(disp.tmp);
-	disp.tmp = disp.str;
 	disp.str = join(disp.str, " ");
-	free(disp.tmp);
-	disp.tmp = disp.str;
-	disp.str = join(disp.str, msg);
-	free(disp.tmp);
-	end_display(disp);
+	free(disp.toi);
+	end_display(disp, philo, msg);
 }

@@ -55,7 +55,7 @@ typedef struct		s_creat
 	pthread_t		lose;
 }					t_creat;
 
-char				*ft_itoa(unsigned long long nb);
+char				*ft_itoa(long nb);
 int					ft_strlen(char *str);
 int					ft_atoi(const char *str);
 int					fill_and_error(t_philo *philo, char **argv, int argc);
