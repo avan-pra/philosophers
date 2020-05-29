@@ -6,7 +6,7 @@
 #    By: selgrabl <selgrabl@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/11 11:50:27 by selgrabl          #+#    #+#              #
-#    Updated: 2019/11/13 18:42:45 by selgrabl         ###   ########.fr        #
+#    Updated: 2020/05/29 16:49:55 by raimbaul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,9 @@ CFLAGS_2 = -Wall -Wextra -Werror -I ./philo_two
 
 CFLAGS_3 = -Wall -Wextra -Werror -I ./philo_three
 
-all: $(NAME)
+ALL = philo_1 philo_2 philo_3
+
+all: philo_1 philo_2 philo_3
 
 philo_1:	$(OBJS_1)
 	$(CC)	-o philo_1 $(FLAGS) $(CFLAGS_1) $(OBJS_1)
@@ -66,10 +68,10 @@ philo_3:	$(OBJS_3)
 
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS_1) $(OBJS_2) $(OBJS_3)
 
 fclean : clean
-	rm -f $(NAME)
+	rm -f $(ALL)
 
 re: fclean all
 
