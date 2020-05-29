@@ -6,7 +6,7 @@
 /*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/25 19:56:53 by velovo            #+#    #+#             */
-/*   Updated: 2020/05/28 14:27:50 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:13:16 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,17 @@ void		display(t_timeval t_start, int philo, char *msg)
 	{
 		disp.tmp = disp.str;
 		disp.str = join(disp.str, "0");
-		if (disp.str)
+		if (disp.tmp)
 			free(disp.tmp);
 		i++;
 	}
 	disp.tmp = disp.str;
 	disp.str = join(disp.str, disp.toi);
-	free(disp.tmp);
-	disp.str = join(disp.str, " ");
+	if (disp.tmp)
+		free(disp.tmp);
 	free(disp.toi);
+	disp.tmp = disp.str;
+	disp.str = join(disp.str, " ");
+	free(disp.tmp);
 	end_display(disp, philo, msg);
 }
