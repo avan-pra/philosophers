@@ -30,11 +30,12 @@ typedef struct		s_philo
 	int				number_of_time_each_philosophers_must_eat;
 	int				number;
 	int				dead;
-	int				eat;
+	int				end;
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
 	pthread_mutex_t	*die;
 	pthread_t		*th;
+	struct timeval	last_time_eat;
 	struct timeval	t_start;
 }					t_philo;
 
@@ -67,6 +68,6 @@ void				*monitoring(void *param);
 void				get_fork(t_philo *philo, t_timeval t_start);
 void				release_fork(t_philo *philo);
 void				eat(t_philo *philo, t_timeval t_start);
-int					psleep(t_philo *philo, t_timeval t_start);
+void				psleep(t_philo *philo, t_timeval t_start);
 
 #endif

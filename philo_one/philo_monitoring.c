@@ -45,13 +45,8 @@ void		*monitoring(void *param)
 	{
 		gettimeofday(&t_now, NULL);
 		t_now = diff_time(t_start, t_now);
-		if (philo->eat == 1)
-			last_time_eat = t_now;
-		else if (philo->eat == 0)
-		{
-			if (death_check(last_time_eat, t_now, philo, t_start) == 1)
-				return (NULL);
-		}
+		if (death_check(philo->last_time_eat, t_now, philo, t_start) == 1)
+			return (NULL);
 		usleep(1000);
 	}
 	return (NULL);

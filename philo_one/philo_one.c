@@ -80,7 +80,7 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].mutext2 = (info.j + 1 == philo.number_of_philosopher) ?
 			&mutext[0] : &mutext[info.j + 1];
 		pthread_create(&th[info.j], NULL, &ft_philosopher, &arr[info.j]);
-		usleep(5000);
+		usleep(100);
 		++info.j;
 	}
 	philo.th = (pthread_t*)&th;
