@@ -66,10 +66,13 @@ philo_2:	$(OBJS_2)
 philo_3:	$(OBJS_3)
 	$(CC)	-o philo_3 $(FLAGS) $(CFLAGS_3) $(OBJS_3) 
 
-mutex_semaphore: $(addprefix mutex_sema_version/, $(OBJS_1))
+mutex_semaphore: $(addprefix mutex_sema_version/, $(OBJS_1)) $(addprefix mutex_sema_version/, $(OBJS_2)) $(addprefix mutex_sema_version/, $(OBJS_3))
+	$(CC)	-o philo_1 $(FLAGS) $(CFLAGS_1) $(addprefix mutex_sema_version/, $(OBJS_1))
+	$(CC)	-o philo_2 $(FLAGS) $(CFLAGS_2) $(addprefix mutex_sema_version/, $(OBJS_2))
+	$(CC)	-o philo_3 $(FLAGS) $(CFLAGS_3) $(addprefix mutex_sema_version/, $(OBJS_3))
 
 clean:
-	rm -f $(OBJS_1) $(OBJS_2) $(OBJS_3)
+	rm -f $(OBJS_1) $(OBJS_2) $(OBJS_3) $(addprefix mutex_sema_version/, $(OBJS_1)) $(addprefix mutex_sema_version/, $(OBJS_2)) $(addprefix mutex_sema_version/, $(OBJS_3))
 
 fclean : clean
 	rm -f $(ALL)
