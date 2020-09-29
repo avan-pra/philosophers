@@ -26,7 +26,7 @@ void	copy_struct(t_philo *paste, t_philo copy, int nbr)
 	paste->output = copy.output;
 }
 
-void	init_mutex(pthread_mutex_t *mutex, int nbr, pthread_mutex_t mort)
+void	init_mutex(pthread_mutex_t *mutex, int nbr)
 {
 	int i;
 
@@ -62,7 +62,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	pthread_mutex_t	mutext[philo.number_of_philosopher];
 	t_creat			info;
 
-	init_mutex(mutext, philo.number_of_philosopher, info.mort);
+	init_mutex(mutext, philo.number_of_philosopher);
 	pthread_mutex_init(&output, NULL);
 	pthread_mutex_init(&info.mort, NULL);
 	pthread_mutex_lock(&info.mort);
@@ -89,7 +89,6 @@ int		create_start_philo(int nbr, t_philo philo)
 int		main(int argc, char **argv)
 {
 	t_philo	philo;
-	int		j;
 
 	srand(time(0));
 	if (fill_and_error(&philo, argv, argc) == 1)

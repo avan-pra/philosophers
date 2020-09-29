@@ -56,6 +56,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	sem_wait(philo.die);
 	gettimeofday(&philo.t_start, NULL);
 	info.j = 0;
+	philo.dead = 0;
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo);

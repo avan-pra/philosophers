@@ -35,7 +35,6 @@ void		*monitoring(void *param)
 	t_philo		*philo;
 	t_timeval	t_now;
 	t_timeval	t_start;
-	t_timeval	t_time;
 
 	philo = (t_philo*)param;
 	t_start = philo->t_start;

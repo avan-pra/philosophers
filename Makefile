@@ -45,9 +45,7 @@ OBJS_3 = $(SRCS3:.c=.o)
 
 CC = clang
 
-CFLAGS = 
-
-FLAGS = -pthread
+FLAGS = -pthread #-fsanitize=address -g3
 
 CFLAGS_1 = -Wall -Wextra -Werror -I ./philo_one
 
@@ -56,6 +54,8 @@ CFLAGS_2 = -Wall -Wextra -Werror -I ./philo_two
 CFLAGS_3 = -Wall -Wextra -Werror -I ./philo_three
 
 ALL = philo_1 philo_2 philo_3
+
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3 
 
 all: philo_1 philo_2 philo_3
 

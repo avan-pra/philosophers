@@ -38,10 +38,9 @@ void		get_time_eat(t_philo *philo)
 void		*ft_philosopher(void *param)
 {
 	t_philo		*philo;
-	pthread_t	moni;
 
 	philo = setup_philo(param);
-	while (philo->ntime_eat < philo->number_of_time_each_philosophers_must_eat
+	while ((int)philo->ntime_eat < philo->number_of_time_each_philosophers_must_eat
 		|| philo->number_of_time_each_philosophers_must_eat == -1)
 	{
 		get_fork(philo, philo->t_start);

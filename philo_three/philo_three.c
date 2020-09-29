@@ -57,6 +57,7 @@ void	setup_philo_launch(t_philo *philo, sem_t **mutext, t_creat *info)
 	sem_wait(philo->die);
 	gettimeofday(&philo->t_start, NULL);
 	info->j = 0;
+	philo->dead = 0;
 }
 
 int		create_start_philo(int nbr, t_philo philo)
