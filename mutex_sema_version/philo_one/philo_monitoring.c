@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 14:54:45 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/09/29 14:54:46 by avan-pra         ###   ########.fr       */
+/*   Created: 2020/09/29 14:33:54 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/09/29 14:33:54 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_two.h"
+#include "philo_one.h"
 
 int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	t_philo *philo, t_timeval t_start)
@@ -20,9 +20,11 @@ int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	t_time = diff_time(last_time_eat, t_now);
 	if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_die)
 	{
+		pthread_mutex_lock(philo->output);
 		display(t_start, philo->number, "died");
+		printf("End of simulation : one of the philosophers died\n");
 		philo->dead = 1;
-		sem_post(philo->die);
+		pthread_mutex_unlock(philo->die);
 		return (1);
 	}
 	return (0);

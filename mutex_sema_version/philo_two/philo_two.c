@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_three.c                                      :+:      :+:    :+:   */
+/*   philo_two.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/05/28 13:37:13 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:31:24 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_three.h"
-#include <sys/types.h>
-#include <signal.h>
+#include "philo_two.h"
 
 void	copy_struct(t_philo *paste, t_philo copy)
 {
@@ -23,7 +21,6 @@ void	copy_struct(t_philo *paste, t_philo copy)
 	paste->time_to_eat = copy.time_to_eat;
 	paste->time_to_sleep = copy.time_to_sleep;
 	paste->t_start = copy.t_start;
-	paste->philo_win = copy.philo_win;
 }
 
 int		check_status(t_philo philo, t_creat info)
@@ -34,39 +31,34 @@ int		check_status(t_philo philo, t_creat info)
 	{
 		if (philo.dead == 1)
 		{
+			usleep(1000);
 			printf("End of simulation : one of the philosophers died\n");
 			return (1);
 		}
 		else if (philo.dead == 2)
 		{
+			usleep(1000);
 			printf("End of simulation : philosophers ate enough times\n");
 			return (0);
 		}
+		usleep(1000);
 	}
-}
-
-void	setup_philo_launch(t_philo *philo, sem_t *mutext, t_creat *info)
-{
-	sem_unlink("/philo_win");
-	philo->philo_win =
-		sem_open("/philo_win", O_CREAT, 0666, philo->number_of_philosopher);
-	sem_unlink("/mutext");
-	mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
-	sem_unlink("/dead");
-	philo->die = sem_open("/dead", O_CREAT, 0666, 1);
-	sem_wait(philo->die);
-	gettimeofday(&philo->t_start, NULL);
-	info->j = 0;
 }
 
 int		create_start_philo(int nbr, t_philo philo)
 {
 	t_philo		arr[nbr];
+	pthread_t	th[nbr];
 	sem_t		*mutext;
 	t_creat		info;
-	pid_t		pid[philo.number_of_philosopher];
 
-	setup_philo_launch(&philo, mutext, &info);
+	sem_unlink("/mutext");
+	mutext = sem_open("/mutext", O_CREAT, 0666, philo.number_of_philosopher);
+	sem_unlink("/dead");
+	philo.die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_wait(philo.die);
+	gettimeofday(&philo.t_start, NULL);
+	info.j = 0;
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo);
@@ -74,17 +66,11 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].number = info.j;
 		arr[info.j].die = philo.die;
 		arr[info.j].mutext = mutext;
-		sem_wait(philo.philo_win);
-		pid[info.j] = fork();
-		if (pid[info.j] == 0)
-		{
-			ft_philosopher(&arr[info.j]);
-			exit(0);
-		}
+		pthread_create(&th[info.j], NULL, &ft_philosopher, &arr[info.j]);
 		usleep(100);
 		++info.j;
 	}
-	philo.pid = (pid_t*)&pid;
+	philo.th = (pthread_t*)&th;
 	return (check_status(philo, info));
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_monitoring.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: avan-pra <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/25 20:07:19 by avan-pra            #+#    #+#             */
-/*   Updated: 2020/05/26 15:34:29 by raimbaul         ###   ########.fr       */
+/*   Created: 2020/09/29 14:33:54 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/09/29 14:33:54 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void		*monitoring(void *param)
 	{
 		gettimeofday(&t_now, NULL);
 		t_now = diff_time(t_start, t_now);
-		if ((int)philo->ntime_eat == philo->number_of_time_each_philosophers_must_eat)
+		if ((int)philo->ntime_eat
+			== philo->number_of_time_each_philosophers_must_eat)
 			return (NULL);
 		if (death_check(philo->last_time_eat, t_now, philo, t_start) == 1)
 			return (NULL);

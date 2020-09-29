@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_three.h                                      :+:      :+:    :+:   */
+/*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 13:22:36 by avan-pra          #+#    #+#             */
-/*   Updated: 2020/05/27 16:13:28 by raimbaul         ###   ########.fr       */
+/*   Updated: 2020/05/26 15:35:17 by raimbaul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_THREE_H
-# define PHILO_THREE_H
+#ifndef PHILO_ONE_H
+# define PHILO_ONE_H
 
 # include <unistd.h>
 # include <sys/time.h>
 # include <stdio.h>
 # include <pthread.h>
 # include <stdlib.h>
-# include <fcntl.h>
-# include <semaphore.h>
-# include <signal.h>
 
 typedef struct timeval	t_timeval;
 
@@ -34,12 +31,13 @@ typedef struct		s_philo
 	int				number;
 	int				dead;
 	size_t			ntime_eat;
-	sem_t			*mutext;
-	sem_t			*die;
-	sem_t			*philo_win;
-	pid_t			*pid;
-	struct timeval	t_start;
+	pthread_mutex_t *output;
+	pthread_mutex_t	*mutext1;
+	pthread_mutex_t	*mutext2;
+	pthread_mutex_t	*die;
+	pthread_t		*th;
 	struct timeval	last_time_eat;
+	struct timeval	t_start;
 }					t_philo;
 
 typedef struct		s_dish
