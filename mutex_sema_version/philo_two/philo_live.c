@@ -15,10 +15,14 @@
 t_philo		*setup_philo(void *param)
 {
 	pthread_t	moni;
+	t_timeval	t_now;
 	t_philo		*philo;
 
 	philo = (t_philo*)param;
 	philo->ntime_eat = 0;
+	philo->last_time_eat = philo->t_start;
+	gettimeofday(&t_now, NULL);
+	philo->last_time_eat = diff_time(philo->t_start, t_now);
 	pthread_create(&moni, NULL, &monitoring, philo);
 	return (philo);
 }
