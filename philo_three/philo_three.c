@@ -88,7 +88,7 @@ int		create_start_philo(int nbr, t_philo philo)
 			ft_philosopher(&arr[info.j]);
 			exit(0);
 		}
-		usleep(5000);
+		usleep(100);
 		++info.j;
 	}
 	philo.th = (pthread_t*)&th;

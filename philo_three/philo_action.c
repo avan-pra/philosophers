@@ -34,12 +34,9 @@ void		eat(t_philo *philo, t_timeval t_start)
 	philo->eat = 0;
 }
 
-int			psleep(t_philo *philo, t_timeval t_start)
+void		psleep(t_philo *philo, t_timeval t_start)
 {
 	display(t_start, philo->number, "is sleeping");
 	usleep(philo->time_to_sleep);
-	if (philo->dead == 1)
-		return (1);
 	display(t_start, philo->number, "is thinking");
-	return (0);
 }
