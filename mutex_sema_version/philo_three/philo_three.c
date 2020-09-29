@@ -54,6 +54,8 @@ void	setup_philo_launch(t_philo *philo, sem_t *mutext, t_creat *info)
 	mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
 	sem_unlink("/dead");
 	philo->die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_unlink("/output");
+	philo->output = sem_open("/output", O_CREAT, 0666, 1);
 	sem_wait(philo->die);
 	gettimeofday(&philo->t_start, NULL);
 	info->j = 0;

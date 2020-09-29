@@ -53,7 +53,6 @@ int		create_start_philo(int nbr, t_philo philo)
 	philo.die = sem_open("/dead", O_CREAT, 0666, 1);
 	sem_unlink("/output");
 	philo.output = sem_open("/output", O_CREAT, 0666, 1);
-	// printf("%p   %p    %p\n", mutext, philo.die, philo.output);
 	sem_wait(philo.die);
 	gettimeofday(&philo.t_start, NULL);
 	info.j = 0;
@@ -64,7 +63,6 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].number = info.j;
 		arr[info.j].die = philo.die;
 		arr[info.j].mutext = mutext;
-		arr[info.j].output = philo.output;
 		pthread_create(&th[info.j], NULL, &ft_philosopher, &arr[info.j]);
 		usleep(100);
 		++info.j;
