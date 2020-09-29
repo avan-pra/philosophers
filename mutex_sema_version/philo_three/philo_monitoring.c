@@ -20,7 +20,9 @@ int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	t_time = diff_time(last_time_eat, t_now);
 	if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_die)
 	{
+		sem_wait(philo->output);
 		display(t_start, philo->number, "died");
+		printf("End of simulation : one of the philosophers died\n");
 		philo->dead = 1;
 		sem_post(philo->die);
 		return (1);

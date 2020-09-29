@@ -43,7 +43,7 @@ OBJS_2 = $(SRCS2:.c=.o)
 
 OBJS_3 = $(SRCS3:.c=.o)
 
-CC = gcc
+CC = clang
 
 FLAGS = -pthread
 
@@ -66,6 +66,7 @@ philo_2:	$(OBJS_2)
 philo_3:	$(OBJS_3)
 	$(CC)	-o philo_3 $(FLAGS) $(CFLAGS_3) $(OBJS_3) 
 
+mutex_semaphore: $(addprefix mutex_sema_version/, $(OBJS_1))
 
 clean:
 	rm -f $(OBJS_1) $(OBJS_2) $(OBJS_3)

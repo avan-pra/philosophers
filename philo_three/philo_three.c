@@ -45,13 +45,13 @@ int		check_status(t_philo philo, t_creat info)
 	}
 }
 
-void	setup_philo_launch(t_philo *philo, sem_t *mutext, t_creat *info)
+void	setup_philo_launch(t_philo *philo, sem_t **mutext, t_creat *info)
 {
 	sem_unlink("/philo_win");
 	philo->philo_win =
 		sem_open("/philo_win", O_CREAT, 0666, philo->number_of_philosopher);
 	sem_unlink("/mutext");
-	mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
+	*mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
 	sem_unlink("/dead");
 	philo->die = sem_open("/dead", O_CREAT, 0666, 1);
 	sem_wait(philo->die);
@@ -66,7 +66,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	t_creat		info;
 	pid_t		pid[philo.number_of_philosopher];
 
-	setup_philo_launch(&philo, mutext, &info);
+	setup_philo_launch(&philo, &mutext, &info);
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo);
