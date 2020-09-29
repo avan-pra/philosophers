@@ -40,7 +40,7 @@ int		check_for_error(t_philo *philo)
 
 int		fill_and_error(t_philo *philo, char **argv, int argc)
 {
-	if (argc < 5 && argc >= 7)
+	if (argc < 5 || argc >= 7)
 	{
 		write(2, "Error while parsing argv\n", 25);
 		return (1);

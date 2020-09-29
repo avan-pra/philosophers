@@ -14,17 +14,17 @@
 
 int		check_for_error(t_philo *philo)
 {
-	if (philo->time_to_die < 50000 || philo->time_to_die > 20000000)
+	if (philo->time_to_die < 60000 || philo->time_to_die > 20000000)
 	{
 		write(2, "Error : value out of range for time to die\n", 25);
 		return (1);
 	}
-	if (philo->time_to_sleep < 0 || philo->time_to_sleep > 20000000)
+	if (philo->time_to_sleep < 60000 || philo->time_to_sleep > 20000000)
 	{
 		write(2, "Error : value out of range for time to sleep\n", 25);
 		return (1);
 	}
-	if (philo->time_to_eat < 0 || philo->time_to_eat > 20000000)
+	if (philo->time_to_eat < 60000 || philo->time_to_eat > 20000000)
 	{
 		write(2, "Error : value out of range for time to eat\n", 25);
 		return (1);
@@ -40,7 +40,7 @@ int		check_for_error(t_philo *philo)
 
 int		fill_and_error(t_philo *philo, char **argv, int argc)
 {
-	if (argc < 5 && argc >= 7)
+	if (argc < 5 || argc >= 7)
 	{
 		write(2, "Error while parsing argv\n", 25);
 		return (1);
