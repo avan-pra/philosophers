@@ -32,7 +32,6 @@ typedef struct		s_philo
 	int				number_of_time_each_philosophers_must_eat;
 	int				number;
 	int				dead;
-	int				eat;
 	size_t			ntime_eat;
 	sem_t			*mutext;
 	sem_t			*die;

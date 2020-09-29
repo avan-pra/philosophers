@@ -91,7 +91,7 @@ int		create_start_philo(int nbr, t_philo philo)
 		usleep(100);
 		++info.j;
 	}
-	philo.th = (pthread_t*)&th;
+	philo.pid = (pid_t*)&pid;
 	return (check_status(philo, info, pid));
 	return (0);
 }

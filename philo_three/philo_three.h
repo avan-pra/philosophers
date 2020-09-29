@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <semaphore.h>
+# include <signal.h>
 
 typedef struct timeval	t_timeval;
 
@@ -32,12 +33,11 @@ typedef struct		s_philo
 	int				number_of_time_each_philosophers_must_eat;
 	int				number;
 	int				dead;
-	int				eat;
 	size_t			ntime_eat;
 	sem_t			*mutext;
 	sem_t			*die;
 	sem_t			*philo_win;
-	pthread_t		*th;
+	pid_t			*pid;
 	struct timeval	t_start;
 	struct timeval	last_time_eat;
 }					t_philo;

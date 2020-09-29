@@ -28,10 +28,8 @@ void		release_fork(t_philo *philo)
 
 void		eat(t_philo *philo, t_timeval t_start)
 {
-	philo->eat = 1;
 	display(t_start, philo->number, "is eating");
 	usleep(philo->time_to_eat);
-	philo->eat = 0;
 }
 
 void		psleep(t_philo *philo, t_timeval t_start)

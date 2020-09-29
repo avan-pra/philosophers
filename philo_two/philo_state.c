@@ -31,11 +31,13 @@ void	*winner(void *param)
 void	*loser(void *param)
 {
 	t_philo	*philo;
+	int i;
 
 	philo = (t_philo*)param;
 	sem_wait(philo->die);
-	usleep(9000);
-	sem_post(philo->die);
+	i = 0;
+	while (i < philo->number_of_philosopher)
+		pthread_detach(philo->th[i++]);
 	philo->dead = 1;
 	return (NULL);
 }

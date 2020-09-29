@@ -32,9 +32,13 @@ void	*winner(void *param)
 void	*loser(void *param)
 {
 	t_philo	*philo;
+	int i;
+
 	philo = (t_philo*)param;
-	usleep(9000);
 	sem_wait(philo->die);
+	i = 0;
+	while (i < philo->number_of_philosopher)
+		kill(philo->pid[i++], SIGINT);
 	philo->dead = 1;
 	return (NULL);
 }
