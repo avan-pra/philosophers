@@ -22,7 +22,7 @@ int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	{
 		pthread_mutex_lock(philo->output);
 		display(t_start, philo->number, "died");
-		printf("End of simulation : one of the philosophers died\n");
+		write(1, "End of simulation : one of the philosophers died\n", 49);
 		philo->dead = 1;
 		pthread_mutex_unlock(philo->die);
 		return (1);

@@ -37,7 +37,7 @@ int		check_status(t_philo philo, t_creat info)
 			return (1);
 		else if (philo.dead == 2)
 		{
-			printf("End of simulation : philosophers ate enough times\n");
+			write(1, "End of simulation : philosophers ate enough times\n", 50);
 			return (0);
 		}
 	}

@@ -32,13 +32,13 @@ int		check_status(t_philo philo, t_creat info)
 		if (philo.dead == 1)
 		{
 			usleep(1000);
-			printf("End of simulation : one of the philosophers died\n");
+			write(1, "End of simulation : one of the philosophers died\n", 49);
 			return (1);
 		}
 		else if (philo.dead == 2)
 		{
 			usleep(1000);
-			printf("End of simulation : philosophers ate enough times\n");
+			write(1, "End of simulation : philosophers ate enough times\n", 50);
 			return (0);
 		}
 		usleep(1000);
