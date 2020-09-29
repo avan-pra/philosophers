@@ -45,6 +45,8 @@ OBJS_3 = $(SRCS3:.c=.o)
 
 CC = clang
 
+CFLAGS = 
+
 FLAGS = -pthread
 
 CFLAGS_1 = -Wall -Wextra -Werror -I ./philo_one

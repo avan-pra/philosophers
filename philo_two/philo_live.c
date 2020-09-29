@@ -19,6 +19,7 @@ t_philo		*setup_philo(void *param)
 
 	philo = (t_philo*)param;
 	philo->ntime_eat = 0;
+	philo->last_time_eat = philo->t_start;
 	pthread_create(&moni, NULL, &monitoring, philo);
 	return (philo);
 }
