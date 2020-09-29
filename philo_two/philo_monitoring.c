@@ -33,25 +33,18 @@ void		*monitoring(void *param)
 	t_philo		*philo;
 	t_timeval	t_now;
 	t_timeval	t_start;
-	t_timeval	last_time_eat;
 	t_timeval	t_time;
 
 	philo = (t_philo*)param;
 	t_start = philo->t_start;
-	gettimeofday(&t_now, NULL);
-	t_now = diff_time(t_start, t_now);
-	last_time_eat = t_now;
 	while (1)
 	{
 		gettimeofday(&t_now, NULL);
 		t_now = diff_time(t_start, t_now);
-		if (philo->eat == 1)
-			last_time_eat = t_now;
-		else if (philo->eat == 0)
-		{
-			if (death_check(last_time_eat, t_now, philo, t_start) == 1)
-				return (NULL);
-		}
+		if ((int)philo->ntime_eat == philo->number_of_time_each_philosophers_must_eat)
+			return (NULL);
+		if (death_check(philo->last_time_eat, t_now, philo, t_start) == 1)
+			return (NULL);
 		usleep(1000);
 	}
 	return (NULL);

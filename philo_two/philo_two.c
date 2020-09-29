@@ -67,7 +67,7 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].die = philo.die;
 		arr[info.j].mutext = mutext;
 		pthread_create(&th[info.j], NULL, &ft_philosopher, &arr[info.j]);
-		usleep(5000);
+		usleep(100);
 		++info.j;
 	}
 	philo.th = (pthread_t*)&th;
