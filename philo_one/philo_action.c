@@ -15,9 +15,13 @@
 void		get_fork(t_philo *philo, t_timeval t_start)
 {
 	pthread_mutex_lock(philo->mutext1);
+	pthread_mutex_lock(philo->output);
 	display(t_start, philo->number, "has taken a fork");
+	pthread_mutex_unlock(philo->output);
 	pthread_mutex_lock(philo->mutext2);
+	pthread_mutex_lock(philo->output);
 	display(t_start, philo->number, "has taken a fork");
+	pthread_mutex_unlock(philo->output);
 }
 
 void		release_fork(t_philo *philo)
@@ -28,13 +32,19 @@ void		release_fork(t_philo *philo)
 
 void		eat(t_philo *philo, t_timeval t_start)
 {
+	pthread_mutex_lock(philo->output);
 	display(t_start, philo->number, "is eating");
+	pthread_mutex_unlock(philo->output);
 	usleep(philo->time_to_eat);
 }
 
 void		psleep(t_philo *philo, t_timeval t_start)
 {
+	pthread_mutex_lock(philo->output);
 	display(t_start, philo->number, "is sleeping");
+	pthread_mutex_unlock(philo->output);
 	usleep(philo->time_to_sleep);
+	pthread_mutex_lock(philo->output);
 	display(t_start, philo->number, "is thinking");
+	pthread_mutex_unlock(philo->output);
 }

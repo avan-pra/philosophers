@@ -20,7 +20,9 @@ int			death_check(t_timeval last_time_eat, t_timeval t_now,
 	t_time = diff_time(last_time_eat, t_now);
 	if (t_time.tv_sec * 1000000 + t_time.tv_usec >= philo->time_to_die)
 	{
+		pthread_mutex_lock(philo->output);
 		display(t_start, philo->number, "died");
+		write(1, "End of simulation : one of the philosophers died\n", 49);
 		philo->dead = 1;
 		pthread_mutex_unlock(philo->die);
 		return (1);

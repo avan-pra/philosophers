@@ -31,7 +31,6 @@ typedef struct		s_philo
 	int				number;
 	int				dead;
 	size_t			ntime_eat;
-	pthread_mutex_t *output;
 	pthread_mutex_t	*mutext1;
 	pthread_mutex_t	*mutext2;
 	pthread_mutex_t	*die;

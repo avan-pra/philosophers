@@ -33,6 +33,7 @@ typedef struct		s_philo
 	int				number;
 	int				dead;
 	size_t			ntime_eat;
+	sem_t			*output;
 	sem_t			*mutext;
 	sem_t			*die;
 	pthread_t		*th;

@@ -24,6 +24,7 @@ void	copy_struct(t_philo *paste, t_philo copy)
 	paste->time_to_sleep = copy.time_to_sleep;
 	paste->t_start = copy.t_start;
 	paste->philo_win = copy.philo_win;
+	paste->output = copy.output;
 }
 
 int		check_status(t_philo philo, t_creat info)
@@ -33,10 +34,7 @@ int		check_status(t_philo philo, t_creat info)
 	while (1)
 	{
 		if (philo.dead == 1)
-		{
-			write(1, "End of simulation : one of the philosophers died\n", 49);
 			return (1);
-		}
 		else if (philo.dead == 2)
 		{
 			write(1, "End of simulation : philosophers ate enough times\n", 50);
@@ -54,6 +52,8 @@ void	setup_philo_launch(t_philo *philo, sem_t **mutext, t_creat *info)
 	*mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
 	sem_unlink("/dead");
 	philo->die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_unlink("/output");
+	philo->output = sem_open("/output", O_CREAT, 0666, 1);
 	sem_wait(philo->die);
 	gettimeofday(&philo->t_start, NULL);
 	info->j = 0;

@@ -23,6 +23,7 @@ void	copy_struct(t_philo *paste, t_philo copy, int nbr)
 	paste->t_start = copy.t_start;
 	paste->dead = 0;
 	paste->number = nbr;
+	paste->output = copy.output;
 }
 
 void	init_mutex(pthread_mutex_t *mutex, int nbr, pthread_mutex_t mort)
@@ -37,18 +38,15 @@ void	init_mutex(pthread_mutex_t *mutex, int nbr, pthread_mutex_t mort)
 	}
 }
 
-int		check_status(t_philo philo, t_creat info)
+int		check_status(t_philo *philo, t_creat info)
 {
-	pthread_create(&info.win, NULL, &winner, &philo);
-	pthread_create(&info.lose, NULL, &loser, &philo);
+	pthread_create(&info.win, NULL, &winner, philo);
+	pthread_create(&info.lose, NULL, &loser, philo);
 	while (1)
 	{
-		if (philo.dead == 1)
-		{
-			write(1, "End of simulation : one of the philosophers died\n", 49);
+		if (philo->dead == 1)
 			return (1);
-		}
-		else if (philo.dead == 2)
+		else if (philo->dead == 2)
 		{
 			write(1, "End of simulation : philosophers ate enough times\n", 50);
 			return (0);
@@ -60,14 +58,17 @@ int		create_start_philo(int nbr, t_philo philo)
 {
 	t_philo			arr[nbr];
 	pthread_t		th[nbr];
+	pthread_mutex_t output;
 	pthread_mutex_t	mutext[philo.number_of_philosopher];
 	t_creat			info;
 
 	init_mutex(mutext, philo.number_of_philosopher, info.mort);
+	pthread_mutex_init(&output, NULL);
 	pthread_mutex_init(&info.mort, NULL);
 	pthread_mutex_lock(&info.mort);
 	gettimeofday(&philo.t_start, NULL);
 	philo.dead = 0;
+	philo.output = &output;
 	info.j = 0;
 	while (info.j < philo.number_of_philosopher)
 	{
@@ -82,7 +83,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	}
 	philo.th = (pthread_t*)&th;
 	philo.die = &info.mort;
-	return (check_status(philo, info));
+	return (check_status(&philo, info));
 }
 
 int		main(int argc, char **argv)
