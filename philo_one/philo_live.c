@@ -12,13 +12,13 @@
 
 #include "philo_one.h"
 
-t_philo		*setup_philo(void *param, int *ntime_eat)
+t_philo		*setup_philo(void *param)
 {
 	pthread_t	moni;
 	t_philo		*philo;
 
 	philo = (t_philo*)param;
-	*ntime_eat = 0;
+	philo->ntime_eat = 0;
 	philo->end = 0;
 	philo->last_time_eat = philo->t_start;
 	pthread_create(&moni, NULL, &monitoring, philo);
@@ -37,16 +37,15 @@ void		*ft_philosopher(void *param)
 {
 	t_philo		*philo;
 	pthread_t	moni;
-	int			ntime_eat;
 
-	philo = setup_philo(param, &ntime_eat);
-	while (ntime_eat < philo->number_of_time_each_philosophers_must_eat
+	philo = setup_philo(param);
+	while (philo->ntime_eat < philo->number_of_time_each_philosophers_must_eat
 		|| philo->number_of_time_each_philosophers_must_eat == -1)
 	{
 		get_fork(philo, philo->t_start);
 		get_time_eat(philo);
 		eat(philo, philo->t_start);
-		++ntime_eat;
+		++philo->ntime_eat;
 		release_fork(philo);
 		psleep(philo, philo->t_start);
 	}

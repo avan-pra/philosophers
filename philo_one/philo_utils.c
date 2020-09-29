@@ -55,7 +55,7 @@ char		*join(char *s1, char *s2)
 void		end_display(t_dish disp, int philo, char *msg)
 {
 	disp.tmp = disp.str;
-	disp.toi = ft_itoa(philo);
+	disp.toi = ft_itoa(philo + 1);
 	disp.str = join(disp.str, disp.toi);
 	free(disp.toi);
 	free(disp.tmp);
