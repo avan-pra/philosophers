@@ -17,7 +17,8 @@
 		./srcs/philo_one/tools.c			\
 		./srcs/philo_one/philo_one.c			\
 		./srcs/philo_one/philo_state.c		\
-		./srcs/philo_one/philo_utils.c
+		./srcs/philo_one/philo_utils.c		\
+		./srcs/philo_one/philo_init_mutex.c
 
  SRCS2 = 	./srcs/philo_two/init_philo.c		\
 		./srcs/philo_two/philo_action.c		\

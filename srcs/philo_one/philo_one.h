@@ -70,5 +70,6 @@ void				get_fork(t_philo *philo, t_timeval t_start);
 void				release_fork(t_philo *philo);
 void				eat(t_philo *philo, t_timeval t_start);
 void				psleep(t_philo *philo, t_timeval t_start);
+void				init_mutex(pthread_mutex_t *mutex, int nbr);
 
 #endif

@@ -40,6 +40,20 @@ int		check_status(t_philo philo, t_creat info)
 	}
 }
 
+void	setup_philo_launch(t_philo *philo, sem_t **mutext, t_creat *info)
+{
+	sem_unlink("/mutext");
+	*mutext = sem_open("/mutext", O_CREAT, 0666, philo->number_of_philosopher);
+	sem_unlink("/dead");
+	philo->die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_unlink("/output");
+	philo->output = sem_open("/output", O_CREAT, 0666, 1);
+	sem_wait(philo->die);
+	gettimeofday(&philo->t_start, NULL);
+	info->j = 0;
+	philo->dead = 0;
+}
+
 int		create_start_philo(int nbr, t_philo philo)
 {
 	t_philo		arr[nbr];
@@ -47,16 +61,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	sem_t		*mutext;
 	t_creat		info;
 
-	sem_unlink("/mutext");
-	mutext = sem_open("/mutext", O_CREAT, 0666, philo.number_of_philosopher);
-	sem_unlink("/dead");
-	philo.die = sem_open("/dead", O_CREAT, 0666, 1);
-	sem_unlink("/output");
-	philo.output = sem_open("/output", O_CREAT, 0666, 1);
-	sem_wait(philo.die);
-	gettimeofday(&philo.t_start, NULL);
-	info.j = 0;
-	philo.dead = 0;
+	setup_philo_launch(&philo, &mutext, &info);
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo);

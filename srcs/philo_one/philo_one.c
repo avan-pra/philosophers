@@ -26,18 +26,6 @@ void	copy_struct(t_philo *paste, t_philo copy, int nbr)
 	paste->output = copy.output;
 }
 
-void	init_mutex(pthread_mutex_t *mutex, int nbr)
-{
-	int i;
-
-	i = 0;
-	while (i < nbr)
-	{
-		pthread_mutex_init(&mutex[i], NULL);
-		++i;
-	}
-}
-
 int		check_status(t_philo *philo, t_creat info)
 {
 	pthread_create(&info.win, NULL, &winner, philo);
@@ -54,6 +42,18 @@ int		check_status(t_philo *philo, t_creat info)
 	}
 }
 
+void	setup_philo_launch
+	(t_philo *philo, pthread_mutex_t *output, t_creat *info)
+{
+	pthread_mutex_init(output, NULL);
+	pthread_mutex_init(&info->mort, NULL);
+	pthread_mutex_lock(&info->mort);
+	gettimeofday(&philo->t_start, NULL);
+	philo->dead = 0;
+	philo->output = output;
+	info->j = 0;
+}
+
 int		create_start_philo(int nbr, t_philo philo)
 {
 	t_philo			arr[nbr];
@@ -63,13 +63,7 @@ int		create_start_philo(int nbr, t_philo philo)
 	t_creat			info;
 
 	init_mutex(mutext, philo.number_of_philosopher);
-	pthread_mutex_init(&output, NULL);
-	pthread_mutex_init(&info.mort, NULL);
-	pthread_mutex_lock(&info.mort);
-	gettimeofday(&philo.t_start, NULL);
-	philo.dead = 0;
-	philo.output = &output;
-	info.j = 0;
+	setup_philo_launch(&philo, &output, &info);
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo, info.j);
