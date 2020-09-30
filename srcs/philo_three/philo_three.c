@@ -82,7 +82,7 @@ int		create_start_philo(int nbr, t_philo philo)
 			ft_philosopher(&arr[info.j]);
 			exit(0);
 		}
-		usleep(40);
+		usleep(45);
 		++info.j;
 	}
 	philo.pid = (pid_t*)&pid;
