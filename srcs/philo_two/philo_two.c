@@ -21,6 +21,7 @@ void	copy_struct(t_philo *paste, t_philo copy)
 	paste->time_to_eat = copy.time_to_eat;
 	paste->time_to_sleep = copy.time_to_sleep;
 	paste->t_start = copy.t_start;
+	paste->output = copy.output;
 }
 
 int		check_status(t_philo philo, t_creat info)
@@ -30,18 +31,12 @@ int		check_status(t_philo philo, t_creat info)
 	while (1)
 	{
 		if (philo.dead == 1)
-		{
-			usleep(1000);
-			write(1, "End of simulation : one of the philosophers died\n", 49);
 			return (1);
-		}
 		else if (philo.dead == 2)
 		{
-			usleep(1000);
 			write(1, "End of simulation : philosophers ate enough times\n", 50);
 			return (0);
 		}
-		usleep(1000);
 	}
 }
 
@@ -56,9 +51,12 @@ int		create_start_philo(int nbr, t_philo philo)
 	mutext = sem_open("/mutext", O_CREAT, 0666, philo.number_of_philosopher);
 	sem_unlink("/dead");
 	philo.die = sem_open("/dead", O_CREAT, 0666, 1);
+	sem_unlink("/output");
+	philo.output = sem_open("/output", O_CREAT, 0666, 1);
 	sem_wait(philo.die);
 	gettimeofday(&philo.t_start, NULL);
 	info.j = 0;
+	philo.dead = 0;
 	while (info.j < philo.number_of_philosopher)
 	{
 		copy_struct(&arr[info.j], philo);
@@ -67,7 +65,7 @@ int		create_start_philo(int nbr, t_philo philo)
 		arr[info.j].die = philo.die;
 		arr[info.j].mutext = mutext;
 		pthread_create(&th[info.j], NULL, &ft_philosopher, &arr[info.j]);
-		usleep(100);
+		usleep(40);
 		++info.j;
 	}
 	philo.th = (pthread_t*)&th;
