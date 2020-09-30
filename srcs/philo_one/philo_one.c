@@ -84,7 +84,6 @@ int		main(int argc, char **argv)
 {
 	t_philo	philo;
 
-	srand(time(0));
 	if (fill_and_error(&philo, argv, argc) == 1)
 		return (1);
 	return (create_start_philo(philo.number_of_philosopher, philo));
